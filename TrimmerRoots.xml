@@ -1,0 +1,5 @@
+<linker>
+  <!-- Preserve all code in the application assembly so the trimmer doesn't
+       remove types that are only referenced via Avalonia's XAML reflection. -->
+  <assembly fullname="TupiScreen" preserve="all" />
+</linker>
