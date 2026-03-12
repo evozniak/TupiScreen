@@ -1,0 +1,50 @@
+name: Publish to AUR
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  aur-publish:
+    name: Publish to AUR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Compute sha256sum of release tarball
+        id: sha
+        run: |
+          URL="https://github.com/${{ github.repository }}/archive/refs/tags/${{ github.ref_name }}.tar.gz"
+          SHA=$(curl -fsSL "$URL" | sha256sum | awk '{print $1}')
+          echo "SHA256=$SHA" >> "$GITHUB_OUTPUT"
+
+      - name: Update PKGBUILD and .SRCINFO
+        run: |
+          VERSION="${{ steps.version.outputs.VERSION }}"
+          SHA="${{ steps.sha.outputs.SHA256 }}"
+
+          sed -i "s/^pkgver=.*/pkgver=$VERSION/" packaging/PKGBUILD
+          sed -i "s/sha256sums=('SKIP')/sha256sums=('$SHA')/" packaging/PKGBUILD
+          sed -i "s|TupiScreen-.*\.tar\.gz|TupiScreen-$VERSION.tar.gz|g" packaging/PKGBUILD
+
+          sed -i "s/^\tpkgver = .*/\tpkgver = $VERSION/" packaging/.SRCINFO
+          sed -i "s/\tsha256sums = SKIP/\tsha256sums = $SHA/" packaging/.SRCINFO
+          sed -i "s|TupiScreen-.*\.tar\.gz|TupiScreen-$VERSION.tar.gz|g" packaging/.SRCINFO
+
+      - name: Publish to AUR
+        uses: KSXGitHub/github-actions-deploy-aur@v3
+        with:
+          pkgname: tupiscreen
+          pkgbuild: packaging/PKGBUILD
+          srcinfo: packaging/.SRCINFO
+          commit_username: ${{ secrets.AUR_USERNAME }}
+          commit_email: ${{ secrets.AUR_EMAIL }}
+          ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+          commit_message: "Update to v${{ steps.version.outputs.VERSION }}"

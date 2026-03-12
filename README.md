@@ -4,7 +4,7 @@ A lightweight system tray utility for Linux that automatically switches your dis
 
 ## Screenshot
 
-![TupiScreen screenshot](imgs/TupiScreen.png)
+![TupiScreen screenshot](assets/screenshots/TupiScreen.png)
 
 ## Features
 
