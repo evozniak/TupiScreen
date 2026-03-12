@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=TupiScreen
+Comment=Auto-switch display layout and audio output when a game controller is connected
+Exec=tupiscreen
+Icon=tupiscreen
+Terminal=false
+Type=Application
+Categories=Utility;
+Keywords=display;monitor;controller;gamepad;audio;
+StartupNotify=false

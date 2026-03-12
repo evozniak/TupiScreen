@@ -20,6 +20,20 @@ A lightweight system tray utility for Linux that automatically switches your dis
 - `pactl` (PipeWire / PulseAudio) for audio switching
 - No .NET runtime needed — the published binary is a native AOT executable
 
+## Installation
+
+**From the AUR** (Arch Linux):
+
+```bash
+# with an AUR helper
+paru -S tupiscreen
+
+# or manually
+git clone https://aur.archlinux.org/tupiscreen.git
+cd tupiscreen && makepkg -si
+```
+
+
 ## Building
 
 For local development:
