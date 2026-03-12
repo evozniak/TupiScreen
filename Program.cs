@@ -1,4 +1,4 @@
-﻿using Avalonia;
+using Avalonia;
 using System;
 
 namespace TupiScreen;
@@ -122,7 +122,7 @@ class Program
             return;
         }
 
-        BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+        BuildAvaloniaApp().StartWithClassicDesktopLifetime(args ?? []);
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.

@@ -18,19 +18,23 @@ A lightweight system tray utility for Linux that automatically switches your dis
 
 - Linux with KDE Plasma (uses `kscreen-doctor`)
 - `pactl` (PipeWire / PulseAudio) for audio switching
-- .NET 8 runtime (or self-contained build)
+- No .NET runtime needed — the published binary is a native AOT executable
 
 ## Building
+
+For local development:
 
 ```bash
 dotnet build
 ```
 
-Or publish a self-contained single-file binary:
+To publish a native AOT binary (no .NET runtime required on the target machine):
 
 ```bash
-dotnet publish -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true
+dotnet publish -c Release -r linux-x64
 ```
+
+The output lands in `bin/Release/net10.0/linux-x64/publish/`. Copy `TupiScreen`, `libSkiaSharp.so`, and `libHarfBuzzSharp.so` to the target machine — that's all you need.
 
 ## Usage
 
