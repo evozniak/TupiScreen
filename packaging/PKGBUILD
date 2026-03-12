@@ -14,7 +14,6 @@ sha256sums=('SKIP')
 build() {
     cd "TupiScreen-$pkgver"
     dotnet publish -c Release -r linux-x64 \
-        --no-self-contained false \
         -o "$srcdir/publish"
 }
 
