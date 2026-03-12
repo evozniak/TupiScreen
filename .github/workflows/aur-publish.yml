@@ -25,7 +25,7 @@ jobs:
           SHA=$(curl -fsSL "$URL" | sha256sum | awk '{print $1}')
           echo "SHA256=$SHA" >> "$GITHUB_OUTPUT"
 
-      - name: Update PKGBUILD and .SRCINFO
+      - name: Update PKGBUILD
         run: |
           VERSION="${{ steps.version.outputs.VERSION }}"
           SHA="${{ steps.sha.outputs.SHA256 }}"
@@ -34,16 +34,11 @@ jobs:
           sed -i "s/sha256sums=('SKIP')/sha256sums=('$SHA')/" packaging/PKGBUILD
           sed -i "s|TupiScreen-.*\.tar\.gz|TupiScreen-$VERSION.tar.gz|g" packaging/PKGBUILD
 
-          sed -i "s/^\tpkgver = .*/\tpkgver = $VERSION/" packaging/.SRCINFO
-          sed -i "s/\tsha256sums = SKIP/\tsha256sums = $SHA/" packaging/.SRCINFO
-          sed -i "s|TupiScreen-.*\.tar\.gz|TupiScreen-$VERSION.tar.gz|g" packaging/.SRCINFO
-
       - name: Publish to AUR
         uses: KSXGitHub/github-actions-deploy-aur@v3
         with:
           pkgname: tupiscreen
           pkgbuild: packaging/PKGBUILD
-          srcinfo: packaging/.SRCINFO
           commit_username: ${{ secrets.AUR_USERNAME }}
           commit_email: ${{ secrets.AUR_EMAIL }}
           ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
